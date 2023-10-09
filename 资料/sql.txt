@@ -1,0 +1,49 @@
+-- 创建健身会所或健身俱乐部信息表
+CREATE TABLE gym_club (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '唯一标识符，主键',
+    name VARCHAR(255) NOT NULL UNIQUE COMMENT '健身会所或俱乐部的名称',
+    description TEXT COMMENT '健身会所或俱乐部的简介',
+    country VARCHAR(50) COMMENT '国家',
+    city VARCHAR(50) COMMENT '城市',
+    street_address VARCHAR(255) COMMENT '街道地址',
+    phone VARCHAR(15) COMMENT '联系电话',
+    business_hours VARCHAR(50) COMMENT '营业时间',
+    average_rating DECIMAL(3, 2) COMMENT '用户对健身会所的平均评分'
+);
+
+-- 创建健身器材表
+CREATE TABLE equipment (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '唯一标识符，主键',
+    name VARCHAR(255) NOT NULL COMMENT '健身器材的名称',
+    description TEXT COMMENT '健身器材的描述',
+    quantity INT COMMENT '数量'
+);
+
+-- 创建教练表
+CREATE TABLE coach (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '唯一标识符，主键',
+    name VARCHAR(100) NOT NULL COMMENT '教练的姓名',
+    contact_info VARCHAR(255) COMMENT '联系信息',
+    qualifications TEXT COMMENT '资质'
+);
+
+-- 创建用户评论表
+CREATE TABLE user_review (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '唯一标识符，主键',
+    gym_club_id INT COMMENT '健身会所的外键，关联到健身会所信息表的id字段',
+    user_id INT COMMENT '用户的外键，关联到管理员信息表的id字段',
+    review_text TEXT COMMENT '用户对健身会所的评论',
+    rating DECIMAL(3, 2) COMMENT '评分',
+    review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '评论时间'
+);
+
+-- 创建管理员信息表
+CREATE TABLE admin (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '唯一标识符，主键',
+    username VARCHAR(50) NOT NULL UNIQUE COMMENT '管理员的用户名',
+    password VARCHAR(255) NOT NULL COMMENT '管理员的密码，加密存储',
+    name VARCHAR(100) NOT NULL COMMENT '管理员的真实姓名',
+    email VARCHAR(100) NOT NULL UNIQUE COMMENT '管理员的电子邮件地址',
+    phone VARCHAR(15) COMMENT '管理员的手机号码',
+    managed_gym INT COMMENT '所管理的健身会所的外键，关联到健身会所信息表的id字段'
+);
