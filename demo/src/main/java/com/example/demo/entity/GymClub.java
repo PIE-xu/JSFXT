@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,6 +17,9 @@ public class GymClub {
     private String phone;         // 联系电话
     private String businessHours; // 营业时间
     private BigDecimal averageRating; // 用户对健身会所的平均评分
-
+    @TableField(exist = false)
+    private Equipment equipment;  // 健身房设备
+    @TableField(exist = false)
+    private Coach coach;          // 健身房教练
     // 省略构造函数、getter和setter方法
 }

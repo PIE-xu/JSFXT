@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 @Data
@@ -11,6 +12,7 @@ public class Admin {
     private String email;       // 管理员的电子邮件地址
     private String phone;       // 管理员的手机号码
     private int managedGym;     // 所管理的健身会所的外键，关联到健身会所信息表的id字段
-
+    @TableField(exist = false)
+    private GymClub gymClub;
     // 省略构造函数、getter和setter方法
 }
