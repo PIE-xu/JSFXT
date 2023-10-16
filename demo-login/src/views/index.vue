@@ -48,28 +48,28 @@ export default {
   data() {
     return {
       carouselItems: [
-        { id: 1, image: "gym1.jpg" },
-        { id: 2, image: "gym2.jpg" },
-        { id: 3, image: "gym3.jpg" },
+        { id: 1, image: "public/image/gym1.jpeg" },
+        { id: 2, image: "public/image/gym2.jpeg" },
+        { id: 3, image: "public/image/gym3.jpg" },
       ],
       recommendedGyms: [
         {
           id: 1,
           name: "健身房 A",
           description: "顶级设备，专业教练，全天开放。",
-          image: "gym_a.jpg",
+          image: "public/image/gym_a.jpg",
         },
         {
           id: 2,
           name: "健身房 B",
           description: "宽敞空间，个性化训练计划。",
-          image: "gym_b.jpg",
+          image: "public/image/gym_b.jpg",
         },
         {
           id: 3,
           name: "健身房 C",
           description: "瑜伽，有氧，无氧，多种选择。",
-          image: "gym_c.jpg",
+          image: "public/image/gym_c.jpeg",
         }]
     };
   },

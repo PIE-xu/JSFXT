@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import indexView from '../views/index.vue'
+import Details from '../views/details.vue'
 import LoginView from '../views/login/index.vue'
 
 
@@ -23,6 +24,11 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component:LoginView
+    },
+    {
+      path: '/details',
+      name: 'details',
+      component: Details
     }
   ]
 })
