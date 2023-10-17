@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import indexView from '../views/index.vue'
 import Details from '../views/details.vue'
 import LoginView from '../views/login/index.vue'
+import AdminInfo from "@/views/adminInfo.vue";
+import GymManage from "@/views/GymManage.vue";
 
 
 const router = createRouter({
@@ -29,6 +31,16 @@ const router = createRouter({
       path: '/details',
       name: 'details',
       component: Details
+    },
+    {
+      path: '/adminInfo',
+      name: 'adminInfo',
+      component: AdminInfo
+    },
+    {
+      path: '/gymmanage',
+      name: 'gymmanage',
+      component: GymManage
     }
   ]
 })
