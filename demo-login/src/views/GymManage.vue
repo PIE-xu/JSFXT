@@ -89,7 +89,7 @@
     <!-- 新增教练对话框 -->
     <el-dialog
         title="新增教练"
-        :visible="addCoachDialogVisible"
+        v-model="addCoachDialogVisible"
         @close="addCoachDialogVisible = false"
     >
       <!-- 教练新增表单 -->
@@ -114,7 +114,7 @@
     <!-- 新增健身器材对话框 -->
     <el-dialog
         title="新增健身器材"
-        :visible="addEquipmentDialogVisible"
+        v-model="addEquipmentDialogVisible"
         @close="addEquipmentDialogVisible = false"
     >
       <!-- 健身器材新增表单 -->
