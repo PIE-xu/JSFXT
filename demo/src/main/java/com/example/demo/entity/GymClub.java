@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -8,6 +10,7 @@ import java.math.BigDecimal;
 
 @Data
 public class GymClub {
+    @TableId(type = IdType.AUTO)
     private int id;               // 唯一标识符，主键
     private String name;          // 健身会所或俱乐部的名称
     private String description;   // 健身会所或俱乐部的简介

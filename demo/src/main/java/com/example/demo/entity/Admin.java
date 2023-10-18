@@ -1,10 +1,13 @@
 package com.example.demo.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
 public class Admin {
+    @TableId(type = IdType.AUTO)
     private int id;             // 唯一标识符，主键
     private String username;    // 管理员的用户名
     private String password;    // 管理员的密码，加密存储
