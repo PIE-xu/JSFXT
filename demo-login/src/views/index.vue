@@ -4,13 +4,14 @@
     <el-header class="promo-header">
       <div class="promo-nav">
         <div class="promo-button">
-          <el-button type="warning" round class="join-button">加入我们</el-button>
+          <el-button type="warning" round class="join-button" @click="joinUs">加入我们</el-button>
+          <el-button type="warning" round class="manage_edit" @click="manageEdit">健身房管理</el-button>
         </div>
       </div>
     </el-header>
 
     <!-- 轮播图 -->
-    <el-carousel class="promo-carousel" :interval="4000" height="300px">
+    <el-carousel class="promo-carousel" :interval="4000" height="700px">
       <el-carousel-item v-for="item in carouselItems" :key="item.id">
         <img :src="item.image" alt="轮播图" style="width: 100%" />
       </el-carousel-item>
@@ -20,12 +21,12 @@
     <div class="promo-recommendation">
       <el-card v-for="gym in recommendedGyms" :key="gym.id" class="promo-card">
         <div class="promo-image">
-          <img :src="gym.image" alt="健身房图片" style="width: 70%;" />
+          <img :src="gym.image" alt="健身房图片" style="width: 100%;" />
         </div>
         <div class="promo-details">
           <h4>{{ gym.name }}</h4>
           <p>{{ gym.description }}</p>
-          <el-button type="primary" round>了解更多</el-button>
+          <el-button type="primary" round @click="getMore">了解更多</el-button>
         </div>
       </el-card>
     </div>
@@ -43,6 +44,8 @@
   </div>
 </template>
 <script>
+import  {getGymById,} from '@/api/gymclub.js'
+import router from "@/router";
 export default {
   name: "GymPromo",
   data() {
@@ -52,27 +55,42 @@ export default {
         { id: 2, image: "public/image/gym2.jpeg" },
         { id: 3, image: "public/image/gym3.jpg" },
       ],
-      recommendedGyms: [
-        {
-          id: 1,
-          name: "健身房 A",
-          description: "顶级设备，专业教练，全天开放。",
-          image: "public/image/gym_a.jpg",
-        },
-        {
-          id: 2,
-          name: "健身房 B",
-          description: "宽敞空间，个性化训练计划。",
-          image: "public/image/gym_b.jpg",
-        },
-        {
-          id: 3,
-          name: "健身房 C",
-          description: "瑜伽，有氧，无氧，多种选择。",
-          image: "public/image/gym_c.jpeg",
-        }]
+      recommendedGyms: [],
+      // 创建一个新对象，将后端数据的属性映射到前端属性中
+
     };
   },
+  created() {
+    this.getRecommendedGyms(); // 在组件创建时调用获取数据的方法
+  },
+  methods: {
+    //获得推荐健身房数据
+    async getRecommendedGyms() {
+      try {
+        // 使用异步方法获取每个健身房的数据
+        const gym1 = await getGymById(1);
+        gym1.data.image = "public/image/gym_a.jpg"
+        const gym2 = await getGymById(2);
+        gym2.data.image = "public/image/gym_b.jpg"
+        const gym3 = await getGymById(3);
+        gym3.data.image = "public/image/gym_c.jpeg"
+        // 将数据填充到recommendedGyms数组中
+        this.recommendedGyms.push(gym1.data, gym2.data, gym3.data);
+      } catch (error) {
+        console.error('Failed to fetch gym data', error);
+      }
+    },
+    getMore() {
+      router.push('/details')
+    },
+    joinUs() {
+      router.push('/adminInfo')
+    },
+    manageEdit() {
+      router.push('/gymmanage')
+    }
+  },
+
 }
 </script>
 

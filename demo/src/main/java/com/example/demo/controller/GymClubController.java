@@ -21,7 +21,7 @@ public class GymClubController {
     private GymClubService gymClubService;
 
 
-    /*
+    /**
     *
     * 显示健身会所或健身俱乐部信息
     * */
@@ -31,7 +31,7 @@ public class GymClubController {
         return gymClubService.selectPage(pageList, gymList.getQuery());
     }
 
-    /*
+    /**
     *
     * 根据关键字进行搜索查询
     * */
@@ -39,6 +39,7 @@ public class GymClubController {
     public GymClub selectByName(@PathVariable String id){
         return gymClubService.getById(id);
     }
+
 
     @PostMapping("/add")
     public boolean addGym(@RequestBody GymClub gym){
