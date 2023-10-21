@@ -8,6 +8,7 @@
           <el-button type="warning" :icon="CirclePlus" class="join-button" @click="joinUs" v-if="!username">加入我们</el-button>
           <el-button type="warning" :icon="Setting" class="manage_edit" @click="manageEdit" v-if="username">健身房管理</el-button>
           <el-button type="warning" :icon="Sunset" class="login-button" @click="login" v-if="!username">已有账号？立即登录</el-button>
+          <el-button type="warning" :icon="Sunset" class="login-button" @click="goAddGym" v-if="admin.managedGym===0">添加俱乐部</el-button>
         </div>
       </div>
     </el-header>
@@ -49,6 +50,7 @@
 import  {getGymById,} from '@/api/gymclub.js'
 import router from "@/router";
 import {CirclePlus, Setting, Sunset} from "@element-plus/icons-vue";
+import { getAdmin } from '@/api/admin'
 export default {
   name: "GymPromo",
   computed: {
@@ -64,6 +66,15 @@ export default {
   },
   data() {
     return {
+      admin: {
+        id: '',
+        username: '',
+        password: '',
+        name: '',
+        email: '',
+        phone: '',
+        managedGym: '',
+      },
       username: '',
       carouselItems: [
         { id: 1, image: "public/image/gym1.jpeg" },
@@ -77,7 +88,7 @@ export default {
   },
   created() {
     this.getRecommendedGyms(); // 在组件创建时调用获取数据的方法
-    this.username = localStorage.getItem('username') || null
+    this.init();
   },
   methods: {
     //获得推荐健身房数据
@@ -107,6 +118,16 @@ export default {
     },
     login() {
       router.push('/login')
+    },
+    init() {
+      this.admin.username = localStorage.getItem('username') || null
+      getAdmin(this.admin).then(res => {
+        this.admin = res.data
+        console.log(this.admin.managedGym);
+      })
+    },
+    goAddGym(){
+      router.push('/addgym')
     }
   },
 

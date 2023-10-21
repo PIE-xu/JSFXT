@@ -165,17 +165,7 @@ export default {
         phone: '',
         managedGym: '',
       },
-      gymClub: [{
-        id: 1,
-        name: "",
-        description: "",
-        country: "",
-        city: "",
-        streetAddress: "",
-        phone: "",
-        businessHours: "",
-        averageRating: 0,
-      }],
+      gymClub: [],
       gymClubRules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
       },

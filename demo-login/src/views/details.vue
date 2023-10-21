@@ -53,7 +53,7 @@
         <div class="gym-club-coaches">
           <h3>Coaches</h3>
           <ul>
-            <li v-for="coach in gymClub.coaches" :key="coach.id">
+            <li v-for="coach in gymClub.coach" :key="coach.id">
               <strong>{{ coach.name }}:</strong> {{ coach.contactInfo }} (Qualifications: {{ coach.qualifications }})
             </li>
           </ul>
@@ -77,6 +77,7 @@
 <script>
 import {getGymList} from '@/api/gymclub'
 import {getEquipmentByAdminId} from '@/api/equipment'
+import {getCoachByAdminId} from '@/api/coach'
 import {Search,HomeFilled} from "@element-plus/icons-vue";
 import router from "@/router";
 export default {
@@ -107,7 +108,7 @@ export default {
       const tempgym = await getGymList(this.queryForm);
       this.gymClubs = tempgym.data.records
       this.queryForm.total = tempgym.data.total
-      // await this.getDetailsEquipmentByAdminId(this.queryForm.total)
+      await this.getDetailsEquipmentByAdminId(tempgym.data.current,tempgym.data.size)
     },
     handleSizeChange(pageSize) {
       this.queryForm.pagenum = 1
@@ -120,23 +121,25 @@ export default {
     },
     goHome(){
       router.push('/')
-    }
-/*    async getDetailsEquipmentByAdminId(total) {
-      for (let i = 1; i < total; i++) {
+    },
+    async getDetailsEquipmentByAdminId(current,size) {
+      for (let i = current; i < current*size+1; i++) {
         const tempEquipment = await getEquipmentByAdminId(i)
+        const tempCoach = await getCoachByAdminId(i)
         this.gymClubs.forEach(gym => {
+          gym.image = 'public/image/gym_a.jpg'
           if (gym.equipment === null & gym.id === i) {
             // 如果equipment属性为null，你可以添加一个新的equipment对象
             gym.equipment = tempEquipment.data
           }
+          if(gym.coach === null & gym.id === i) {
+            gym.coach = tempCoach.data
+          }
         })
-        this.gymClubs.forEach(gym => {
-          console.log(gym);
-        })
-        // console.log("this.gymClubs[i].equipment"+JSON.stringify(this.gymClubs))
+
       }
 
-    }*/
+    }
   }
 }
 </script>

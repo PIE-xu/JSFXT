@@ -4,6 +4,7 @@ import Details from '../views/details.vue'
 import LoginView from '../views/login/index.vue'
 import AdminInfo from "@/views/adminInfo.vue";
 import GymManage from "@/views/GymManage.vue";
+import AddGym from "@/views/addGym.vue";
 
 
 const router = createRouter({
@@ -43,9 +44,14 @@ const router = createRouter({
       component: AdminInfo
     },
     {
-      path: '/gymmanage',
-      name: 'gymmanage',
-      component: GymManage
+      path: '/adminInfo',
+      name: 'adminInfo',
+      component: AdminInfo
+    },
+    {
+      path: '/addgym',
+      name: 'addgym',
+      component: AddGym
     }
   ]
 })

@@ -1,6 +1,5 @@
 <template>
   <div style="display: flex">
-    <div style="width: 45%"></div>
     <div class="registration-form">
       <el-form :label-width="formLabelWidth" label-position="top">
         <el-card>
@@ -27,47 +26,8 @@
             <el-form-item label="手机号码">
               <el-input v-model="admin.phone"></el-input>
             </el-form-item>
-            <el-form-item label="所管理的健身会所">
-              <el-input v-model="admin.managedGym"></el-input>
-            </el-form-item>
           </div>
         </el-card>
-
-        <el-card>
-          <div class="form-title">
-            <h3>健身房注册信息</h3>
-          </div>
-          <div class="form-row">
-            <el-form-item label="健身会所名称">
-              <el-input v-model="gymClub.name"></el-input>
-            </el-form-item>
-            <el-form-item label="简介">
-              <el-input v-model="gymClub.description"></el-input>
-            </el-form-item>
-          </div>
-          <div class="form-row">
-            <el-form-item label="国家">
-              <el-input v-model="gymClub.country"></el-input>
-            </el-form-item>
-            <el-form-item label="城市">
-              <el-input v-model="gymClub.city"></el-input>
-            </el-form-item>
-          </div>
-          <div class="form-row">
-            <el-form-item label="街道地址">
-              <el-input v-model="gymClub.streetAddress"></el-input>
-            </el-form-item>
-            <el-form-item label="联系电话">
-              <el-input v-model="gymClub.phone"></el-input>
-            </el-form-item>
-          </div>
-          <div class="form-row">
-            <el-form-item label="营业时间">
-              <el-input v-model="gymClub.businessHours"></el-input>
-            </el-form-item>
-          </div>
-        </el-card>
-
         <el-row>
           <el-col :span="12">
             <el-button type="primary" @click="submitForm">提交注册</el-button>
@@ -86,7 +46,6 @@
 
 <script>
 import { add as adminAdd } from '@/api/admin'
-import { add as gymAdd } from '@/api/gymclub'
 import router from "@/router";
 export default {
   data() {
@@ -100,21 +59,11 @@ export default {
         phone: '',
         managedGym: '',
       },
-      gymClub: {
-        name: '',
-        description: '',
-        country: '',
-        city: '',
-        streetAddress: '',
-        phone: '',
-        businessHours: '',
-      },
     };
   },
   methods: {
     async submitForm() {
       await adminAdd(this.admin)
-      await gymAdd(this.gymClub)
       router.replace('/login')
       // 处理表单提交逻辑
     },
@@ -127,15 +76,6 @@ export default {
         email: '',
         phone: '',
         managedGym: '',
-      };
-      this.gymClub = {
-        name: '',
-        description: '',
-        country: '',
-        city: '',
-        streetAddress: '',
-        phone: '',
-        businessHours: '',
       };
     },
   },
