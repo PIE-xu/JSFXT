@@ -18,7 +18,6 @@ public class AdminController {
 
     @PostMapping("/login")
     public Admin userLogin( @RequestBody Admin admin){
-        //Admin admin1 = adminService.getById(admin.getName());
         Admin admin2 = adminService.getOne(Wrappers.<Admin>lambdaQuery().eq(!admin.getUsername().isEmpty(), Admin::getUsername,admin.getUsername()));
         if(admin.getPassword().equals(admin2.getPassword())){
             return admin2;

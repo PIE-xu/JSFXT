@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.demo.entity.Equipment;
 import com.example.demo.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,10 @@ public class EquipmentController {
     }
 
     @GetMapping("admin/{gymId}")
-    public Equipment[] getequipmentByAdminId( @PathVariable String gymId){
-        return new Equipment[]{equipmentService.getByAdminId(gymId)};
+    public List<Equipment> getequipmentByAdminId( @PathVariable String gymId){
+        Equipment equipment = new Equipment();
+        equipment.setGymId(Integer.parseInt(gymId));
+        return equipmentService.list(Wrappers.<Equipment>lambdaQuery().eq(!gymId.isEmpty(), Equipment::getGymId,gymId));
     }
 
     @PostMapping("/add")

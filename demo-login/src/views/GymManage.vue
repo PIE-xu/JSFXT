@@ -46,52 +46,47 @@
 
       <!-- 教练信息表格 -->
       <h3>教练信息</h3>
-      <el-button type="primary" @click="showAddCoachDialog">新增教练</el-button>
+      <el-button type="primary" @click="showAddCoachDialog('add')">新增教练</el-button>
       <el-table
           :data="coaches"
           style="width: 100%"
           v-loading="coachLoading"
-          @selection-change="handleCoachSelectionChange"
       >
-        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="ID" width="80"></el-table-column>
         <el-table-column prop="name" label="姓名"></el-table-column>
         <el-table-column prop="contactInfo" label="联系信息"></el-table-column>
         <el-table-column prop="qualifications" label="资质"></el-table-column>
         <el-table-column label="操作" width="150">
-          <template slot-scope="scope">
-            <el-button type="text" @click="editCoach(scope.row)">编辑</el-button>
-            <el-button type="text" @click="deleteCoach(scope.row)">删除</el-button>
+          <template #default="{row}">
+            <el-button type="text" @click="showAddCoachDialog(row)">编辑</el-button>
+            <el-button type="text" @click="deleteCoach(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
 
       <!-- 健身器材表格 -->
       <h3>健身器材信息</h3>
-      <el-button type="primary" @click="showAddEquipmentDialog">新增健身器材</el-button>
+      <el-button type="primary" @click="showAddEquipmentDialog('add')">新增健身器材</el-button>
       <el-table
           :data="equipment"
           style="width: 100%"
           v-loading="equipmentLoading"
-          @selection-change="handleEquipmentSelectionChange"
       >
-        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="ID" width="80"></el-table-column>
         <el-table-column prop="name" label="名称"></el-table-column>
         <el-table-column prop="description" label="描述"></el-table-column>
         <el-table-column prop="quantity" label="数量"></el-table-column>
         <!-- 其他列配置 ... -->
         <el-table-column label="操作" width="150">
-          <template slot-scope="scope">
-            <el-button type="text" @click="editEquipment(scope.row)">编辑</el-button>
-            <el-button type="text" @click="deleteEquipment(scope.row)">删除</el-button>
+          <template #default="{row}">
+            <el-button type="text" @click="showAddEquipmentDialog(row)">编辑</el-button>
+            <el-button type="text" @click="deleteEquipment(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 新增教练对话框 -->
     <el-dialog
-        title="新增教练"
         v-model="addCoachDialogVisible"
         @close="addCoachDialogVisible = false"
     >
@@ -110,13 +105,13 @@
       <!-- 保存和取消按钮 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="addCoachDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="addCoach">保存</el-button>
+        <el-button type="primary" @click="addCoach" v-if="coachAddButton">保存</el-button>
+        <el-button type="primary" @click="editCoach" v-if="!coachAddButton">保存</el-button>
       </span>
     </el-dialog>
 
     <!-- 新增健身器材对话框 -->
     <el-dialog
-        title="新增健身器材"
         v-model="addEquipmentDialogVisible"
         @close="addEquipmentDialogVisible = false"
     >
@@ -135,7 +130,8 @@
       <!-- 保存和取消按钮 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="addEquipmentDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="addEquipment">保存</el-button>
+        <el-button type="primary" @click="addEquipment" v-if="equipmentAddButton">保存</el-button>
+        <el-button type="primary" @click="editEquipment" v-if="!equipmentAddButton">保存</el-button>
       </span>
     </el-dialog>
 
@@ -145,7 +141,8 @@
 <script>
 import { getGymById,update } from '@/api/gymclub'
 import { getAdmin } from '@/api/admin'
-import {getEquipmentByAdminId} from '@/api/equipment'
+import {getEquipmentByAdminId,add as equipmentAdd ,update as equipmentUpdate,deleteUser as equipmentdelete} from '@/api/equipment'
+import { getCoachByAdminId,add as coachAdd,update as coachUpdate,deleteUser as coachdelete } from '@/api/coach'
 import {HomeFilled} from "@element-plus/icons-vue";
 import router from "@/router";
 export default {
@@ -156,6 +153,9 @@ export default {
   },
   data() {
     return {
+      equipmentTitle: '',
+      coachAddButton: false,
+      equipmentAddButton: false,
       admin: {
         id: '',
         username: '',
@@ -179,21 +179,16 @@ export default {
       gymClubRules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
       },
-      coaches: [{
-
-      }], // 存储教练信息
-      equipment: [{
-
-      }], // 存储健身器材信息
+      coaches: [{}], // 存储教练信息
+      equipment: [{}], // 存储健身器材信息
       coachLoading: false, // 加载状态
       equipmentLoading: false, // 加载状态
-      selectedCoaches: [], // 选中的教练
-      selectedEquipment: [], // 选中的健身器材
       addCoachDialogVisible: false,
       newCoach: {
         name: "",
         contactInfo: "",
         qualifications: "",
+        gymId:"",
       },
       coachRules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
@@ -206,13 +201,14 @@ export default {
         name: "",
         description: "",
         quantity: 0,
+        gymId:"",
       },
       equipmentRules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         description: [{ required: true, message: "请输入描述", trigger: "blur" }],
         quantity: [
           { required: true, message: "请输入数量", trigger: "blur" },
-          { type: "number", message: "数量必须为数字值", trigger: "blur" },
+          { required: true, message: "数量必须为数字值", trigger: "blur" },
         ],
       }
     };
@@ -231,9 +227,11 @@ export default {
           getEquipmentByAdminId(this.gymClub.id).then(res => {
             this.equipment = res.data
           })
+          getCoachByAdminId(this.gymClub.id).then(res =>{
+            this.coaches = res.data
+          })
         })
       })
-      console.log(this.equipment);
     },
     goHome(){
       router.replace('/')
@@ -242,51 +240,61 @@ export default {
     saveGymClub() {
       update(this.gymClub)
     },
-    // 编辑教练信息
-    editCoach(coach) {
-      // 实现编辑逻辑
+    editCoach() {
+      coachUpdate(this.newCoach)
+      this.initGymClub()
+      this.addCoachDialogVisible = false;
+
+    },
+    editEquipment(){
+      equipmentUpdate(this.newEquipment)
+      this.initGymClub()
+      this.addEquipmentDialogVisible = false;
     },
     // 删除教练信息
     deleteCoach(coach) {
+      coachdelete(coach)
+      this.initGymClub()
       // 实现删除逻辑
-    },
-    // 编辑健身器材信息
-    editEquipment(equipment) {
-      // 实现编辑逻辑
     },
     // 删除健身器材信息
     deleteEquipment(equipment) {
+      equipmentdelete(equipment)
+      this.initGymClub()
       // 实现删除逻辑
     },
-    // 处理教练信息选择变化
-    handleCoachSelectionChange(selection) {
-      this.selectedCoaches = selection;
-    },
-    // 处理健身器材选择变化
-    handleEquipmentSelectionChange(selection) {
-      this.selectedEquipment = selection;
-    },
     // 显示新增教练对话框
-    showAddCoachDialog() {
+    showAddCoachDialog(row) {
+      if (row === 'add') {
+        this.coachAddButton = true
+      } else{
+        this.newCoach = JSON.parse(JSON.stringify(row))
+      }
       this.addCoachDialogVisible = true;
     },
     // 新增教练
     addCoach() {
       // 实现新增教练逻辑
+      coachAdd(this.newCoach)
       this.coaches.push({ ...this.newCoach, id: this.coaches.length + 1 });
       this.addCoachDialogVisible = false;
-      this.$message.success("新增教练成功");
     },
     // 显示新增健身器材对话框
-    showAddEquipmentDialog() {
-      this.addEquipmentDialogVisible = true;
+    showAddEquipmentDialog(row) {
+      if (row === 'add') {
+        this.equipmentAddButton = true
+      } else{
+        this.newEquipment = JSON.parse(JSON.stringify(row))
+      }
+      this.addEquipmentDialogVisible = true
     },
     // 新增健身器材
     addEquipment() {
       // 实现新增健身器材逻辑
+      this.newEquipment.gymId = this.gymClub.id
+      equipmentAdd(this.newEquipment)
       this.equipment.push({ ...this.newEquipment, id: this.equipment.length + 1 });
       this.addEquipmentDialogVisible = false;
-      this.$message.success("新增健身器材成功");
     },
   },
 };

@@ -1,15 +1,15 @@
 import request from "@/api/request";
 
-export const getEquipmentByAdminId = (adminId) => {
+export const getCoachByAdminId = (adminId) => {
     return request({
-        url: `/equipment/admin/${adminId}`,
+        url: `/coach/admin/${adminId}`,
         method: 'GET',
     })
 }
 
 export const add = (data) =>{
     return request({
-        url: '/equipment/add',
+        url: '/coach/add',
         method:'POST',
         data
     })
@@ -17,7 +17,7 @@ export const add = (data) =>{
 
 export const update = (data) =>{
     return request({
-        url: '/equipment/update',
+        url: '/coach/update',
         method:'POST',
         data
     })
@@ -25,7 +25,7 @@ export const update = (data) =>{
 
 export const deleteUser = (data) =>{
     return request({
-        url: '/equipment/delete',
+        url: '/coach/delete',
         method:'DELETE',
         data
     })
