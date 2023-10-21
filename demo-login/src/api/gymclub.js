@@ -10,7 +10,6 @@ export const getGymById = (id) => {
 export const getGymList = (params) => {
     return request({
         url: `/gym/gymList`,
-        method: 'GET',
         params
     })
 }

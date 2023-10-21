@@ -16,6 +16,11 @@ public class EquipmentController {
         return equipmentService.getById(id);
     }
 
+    @GetMapping("admin/{gymId}")
+    public Equipment getequipmentByAdminId(@PathVariable String gymId){
+        return equipmentService.getByAdminId(gymId);
+    }
+
     @PostMapping("/add")
     public boolean addCoach(@RequestBody Equipment equipment){
         return  equipmentService.save(equipment);

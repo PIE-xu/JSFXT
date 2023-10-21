@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface EquipmentService extends IService<Equipment> {
+    Equipment getByAdminId( String gymId );
 }

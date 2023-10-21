@@ -1,4 +1,15 @@
 <template>
+  <div class="gym-club-title">
+    <el-button type="primary" :icon="HomeFilled" @click="this.goHome">回到首页</el-button>
+    <h3 style="text-align: center">健身房详细信息列表</h3>
+  </div>
+  <el-row :gutter="20" class="header">
+    <el-col :span="7">
+      <el-input placeholder="请输入健身俱乐部名称" clearable v-model="queryForm.query">
+      </el-input>
+    </el-col>
+    <el-button type="primary" :icon="Search" @click="this.getDetailsGyms">搜索</el-button>
+  </el-row>
   <div class="gym-club-list">
     <div v-for="gymClub in gymClubs" :key="gymClub.id" class="gym-club-card">
       <div class="gym-club-card-left">
@@ -50,117 +61,98 @@
       </div>
     </div>
   </div>
+  <el-pagination
+      class="fenye"
+      v-model:current-page="queryForm.pagenum"
+      v-model:page-size="queryForm.pagesize"
+      :page-sizes="[1, 2, 4, 6]"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="queryForm.total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+  />
 </template>
 
 
 <script>
+import {getGymList} from '@/api/gymclub'
+import {getEquipmentByAdminId} from '@/api/equipment'
+import {Search,HomeFilled} from "@element-plus/icons-vue";
+import router from "@/router";
 export default {
+  computed: {
+    HomeFilled() {
+      return HomeFilled
+    },
+    Search() {
+      return Search
+    }
+  },
   data() {
     return {
-      gymClubs: [
-        {
-          id: 1,
-          name: 'Gym Club 1',
-          description: 'Description for Gym Club 1',
-          country: 'Country 1',
-          city: 'City 1',
-          streetAddress: 'Address 1',
-          phone: '123-456-7890',
-          businessHours: '9:00 AM - 5:00 PM',
-          averageRating: 4.5,
-          image: '/path/to/your/image1.jpg',
-          equipment: [
-            {
-              id: 1,
-              name: 'Treadmill',
-              description: 'Cardio machine',
-              quantity: 10,
-            },
-            // Add more equipment as needed
-          ],
-          coaches: [
-            {
-              id: 1,
-              name: 'John Doe',
-              contactInfo: 'john@example.com',
-              qualifications: 'Certified Personal Trainer',
-            },
-            // Add more coaches as needed
-          ],
-        },
-        {
-          id: 1,
-          name: 'Gym Club 2',
-          description: 'Description for Gym Club 1',
-          country: 'Country 1',
-          city: 'City 1',
-          streetAddress: 'Address 1',
-          phone: '123-456-7890',
-          businessHours: '9:00 AM - 5:00 PM',
-          averageRating: 4.5,
-          image: '/path/to/your/image1.jpg',
-          equipment: [
-            {
-              id: 1,
-              name: 'Treadmill',
-              description: 'Cardio machine',
-              quantity: 10,
-            },
-            // Add more equipment as needed
-          ],
-          coaches: [
-            {
-              id: 1,
-              name: 'John Doe',
-              contactInfo: 'john@example.com',
-              qualifications: 'Certified Personal Trainer',
-            },
-            // Add more coaches as needed
-          ],
-        },
-        {
-          id: 1,
-          name: 'Gym Club 3',
-          description: 'Description for Gym Club 1',
-          country: 'Country 1',
-          city: 'City 1',
-          streetAddress: 'Address 1',
-          phone: '123-456-7890',
-          businessHours: '9:00 AM - 5:00 PM',
-          averageRating: 4.5,
-          image: '/path/to/your/image1.jpg',
-          equipment: [
-            {
-              id: 1,
-              name: 'Treadmill',
-              description: 'Cardio machine',
-              quantity: 10,
-            },{
-              id: 1,
-              name: 'Treadmill',
-              description: 'Cardio machine',
-              quantity: 10,
-            },
-            // Add more equipment as needed
-          ],
-          coaches: [
-            {
-              id: 1,
-              name: 'John Doe',
-              contactInfo: 'john@example.com',
-              qualifications: 'Certified Personal Trainer',
-            },
-            // Add more coaches as needed
-          ],
-        },
-        // Repeat this structure for other gym clubs
-      ],
+      gymClubs: [],
+      queryForm: {
+        query: '',
+        pagenum: 1,
+        pagesize: 3,
+        total:0,
+      }
     };
   },
-};
+  created() {
+    this.getDetailsGyms()
+  },
+  methods: {
+    async getDetailsGyms() {
+      const tempgym = await getGymList(this.queryForm);
+      this.gymClubs = tempgym.data.records
+      this.queryForm.total = tempgym.data.total
+      // await this.getDetailsEquipmentByAdminId(this.queryForm.total)
+    },
+    handleSizeChange(pageSize) {
+      this.queryForm.pagenum = 1
+      this.queryForm.pagesize = pageSize
+      this.getDetailsGyms()
+    },
+    handleCurrentChange(pageNum) {
+      this.queryForm.pagenum = pageNum
+      this.getDetailsGyms()
+    },
+    goHome(){
+      router.push('/')
+    }
+/*    async getDetailsEquipmentByAdminId(total) {
+      for (let i = 1; i < total; i++) {
+        const tempEquipment = await getEquipmentByAdminId(i)
+        this.gymClubs.forEach(gym => {
+          if (gym.equipment === null & gym.id === i) {
+            // 如果equipment属性为null，你可以添加一个新的equipment对象
+            gym.equipment = tempEquipment.data
+          }
+        })
+        this.gymClubs.forEach(gym => {
+          console.log(gym);
+        })
+        // console.log("this.gymClubs[i].equipment"+JSON.stringify(this.gymClubs))
+      }
+
+    }*/
+  }
+}
 </script>
 
 <style>
+.gym-club-title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+.header{
+  padding: 16px;
+  box-sizing: border-box;
+  justify-content: center;
+}
 .gym-club-list {
   display: flex;
   flex-wrap: wrap;
@@ -231,5 +223,8 @@ export default {
 .gym-club-coaches li {
   margin: 5px 0;
   color: #00bfff; /* Light Blue */
+}
+.fenye{
+  margin-left: 300px;
 }
 </style>

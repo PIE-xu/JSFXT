@@ -3,9 +3,11 @@
     <!-- 顶部导航栏 -->
     <el-header class="promo-header">
       <div class="promo-nav">
+        <h3 class="title">健身俱乐部共享平台</h3>
         <div class="promo-button">
-          <el-button type="warning" round class="join-button" @click="joinUs">加入我们</el-button>
-          <el-button type="warning" round class="manage_edit" @click="manageEdit">健身房管理</el-button>
+          <el-button type="warning" :icon="CirclePlus" class="join-button" @click="joinUs">加入我们</el-button>
+          <el-button type="warning" :icon="Setting" class="manage_edit" @click="manageEdit">健身房管理</el-button>
+          <el-button type="warning" :icon="Sunset" class="login-button" @click="login">已有账号？立即登录</el-button>
         </div>
       </div>
     </el-header>
@@ -46,8 +48,20 @@
 <script>
 import  {getGymById,} from '@/api/gymclub.js'
 import router from "@/router";
+import {CirclePlus, Setting, Sunset} from "@element-plus/icons-vue";
 export default {
   name: "GymPromo",
+  computed: {
+    Sunset() {
+      return Sunset
+    },
+    Setting() {
+      return Setting
+    },
+    CirclePlus() {
+      return CirclePlus
+    }
+  },
   data() {
     return {
       carouselItems: [
@@ -88,6 +102,9 @@ export default {
     },
     manageEdit() {
       router.push('/gymmanage')
+    },
+    login() {
+      router.push('/login')
     }
   },
 
@@ -95,6 +112,10 @@ export default {
 </script>
 
 <style scoped>
+.title{
+  color: white;
+}
+
 .gym-promo {
   display: flex;
   flex-direction: column;
@@ -109,17 +130,19 @@ export default {
 .promo-nav {
   margin-top: 15px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center; /* 垂直居中 */
 }
 
 .promo-button {
-  margin-right: 30%; /* 向右偏移30% */
+  margin-right: 20%; /* 向右偏移30% */
 }
 
 .join-button {
-  border-radius: 5px; /* 圆角正方形 */
   background-color: #FFD700; /* 亮黄色 */
+}
+.login-button {
+  background-color: #FFD770;
 }
 
 .promo-carousel {
