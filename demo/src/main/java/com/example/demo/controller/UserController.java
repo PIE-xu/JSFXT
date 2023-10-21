@@ -22,7 +22,6 @@ public class UserController {
 
     @GetMapping("/userList")
     public Page<User> selectPage(pageVo userList){
-        System.out.println(userList);
         Page<User> pageList = new Page<>(userList.getPagenum(),userList.getPagesize());
         return userService.selectPage(pageList, userList.getQuery());
     }

@@ -8,18 +8,18 @@
             <h3>管理员信息</h3>
           </div>
           <div class="form-row">
-            <el-form-item label="用户名">
+            <el-form-item label="用户名*">
               <el-input v-model="admin.username"></el-input>
             </el-form-item>
-            <el-form-item label="密码">
+            <el-form-item label="密码*">
               <el-input type="password" v-model="admin.password"></el-input>
             </el-form-item>
           </div>
           <div class="form-row">
-            <el-form-item label="真实姓名">
+            <el-form-item label="真实姓名*">
               <el-input v-model="admin.name"></el-input>
             </el-form-item>
-            <el-form-item label="电子邮件">
+            <el-form-item label="电子邮件*">
               <el-input v-model="admin.email"></el-input>
             </el-form-item>
           </div>
@@ -85,6 +85,9 @@
 
 
 <script>
+import { add as adminAdd } from '@/api/admin'
+import { add as gymAdd } from '@/api/gymclub'
+import router from "@/router";
 export default {
   data() {
     return {
@@ -109,7 +112,10 @@ export default {
     };
   },
   methods: {
-    submitForm() {
+    async submitForm() {
+      await adminAdd(this.admin)
+      await gymAdd(this.gymClub)
+      router.replace('/login')
       // 处理表单提交逻辑
     },
     resetForm() {

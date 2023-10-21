@@ -2,7 +2,7 @@ import request from "@/api/request";
 
 export const login = (data) =>{
     return request({
-        url: '/user/login',
+        url: '/admin/login',
         method:'POST',
         data
     })

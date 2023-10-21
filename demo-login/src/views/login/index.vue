@@ -14,7 +14,7 @@
         <el-icon :size="20" class="svg-container">
           <Avatar />
         </el-icon>
-        <el-input v-model="form.name" />
+        <el-input v-model="form.username" />
       </el-form-item>
       <el-form-item prop="password">
         <el-icon :size="20" class="svg-container">
@@ -35,14 +35,18 @@
 import { ref } from 'vue'
 import { Avatar,Lock } from '@element-plus/icons-vue'
 import { login } from "@/api/login";
+import { useStore } from "vuex";
 import router from "@/router";
+import {ElMessage} from "element-plus";
+
+const store = useStore()
 
 const form = ref({
-  name: '',
-  password: ''
+  username: 'admin',
+  password: 'admin123'
 })
 const rules = ref({
-  name: [
+  username: [
     { required: true, message: 'Please input Activity name', trigger: 'blur' },
   ],
   password: [
@@ -54,9 +58,7 @@ const formRef = ref(null)
 const handleLogin = () => {
   formRef.value.validate(async (valid, fields) => {
     if (valid) {
-      await login(form.value)
-      await router.push('/')
-      console.log('submit!')
+      store.dispatch('app/login', form.value)
     } else {
       console.log('error submit!', fields)
     }

@@ -1,90 +1,93 @@
 <template>
+  <div class="gym-club-title">
+    <el-button type="primary" :icon="HomeFilled" @click="this.goHome">回到首页</el-button>
+  </div>
   <div class="container">
     <!-- 左侧表单 -->
     <div class="left-container">
-    <!-- 健身房信息管理表单 -->
-    <el-form :model="gymClub" :rules="gymClubRules" ref="gymClubForm" label-width="80px" style="width: 70%;">
-      <h2 style="margin-bottom: 20px;">健身房信息修改</h2>
-      <el-form-item label="ID">
-        <el-input v-model="gymClub.id" :disabled="true"></el-input>
-      </el-form-item>
-      <el-form-item label="名称">
-        <el-input v-model="gymClub.name"></el-input>
-      </el-form-item>
-      <el-form-item label="简介">
-        <el-input v-model="gymClub.description"></el-input>
-      </el-form-item>
-      <el-form-item label="国家">
-        <el-input v-model="gymClub.country"></el-input>
-      </el-form-item>
-      <el-form-item label="城市">
-        <el-input v-model="gymClub.city"></el-input>
-      </el-form-item>
-      <el-form-item label="街道地址">
-        <el-input v-model="gymClub.streetAddress"></el-input>
-      </el-form-item>
-      <el-form-item label="联系电话">
-        <el-input v-model="gymClub.phone"></el-input>
-      </el-form-item>
-      <el-form-item label="营业时间">
-        <el-input v-model="gymClub.businessHours"></el-input>
-      </el-form-item>
-      <el-form-item label="用户平均评分">
-        <el-input v-model="gymClub.averageRating"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="saveGymClub">保存</el-button>
-      </el-form-item>
-    </el-form>
+      <!-- 健身房信息管理表单 -->
+      <el-form :model="gymClub" :rules="gymClubRules" ref="gymClubForm" label-width="80px" style="width: 70%;">
+        <h2 style="margin-bottom: 20px;">健身房信息修改</h2>
+        <el-form-item label="ID">
+          <el-input v-model="gymClub.id" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="名称">
+          <el-input v-model="gymClub.name"></el-input>
+        </el-form-item>
+        <el-form-item label="简介">
+          <el-input v-model="gymClub.description"></el-input>
+        </el-form-item>
+        <el-form-item label="国家">
+          <el-input v-model="gymClub.country"></el-input>
+        </el-form-item>
+        <el-form-item label="城市">
+          <el-input v-model="gymClub.city"></el-input>
+        </el-form-item>
+        <el-form-item label="街道地址">
+          <el-input v-model="gymClub.streetAddress"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话">
+          <el-input v-model="gymClub.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="营业时间">
+          <el-input v-model="gymClub.businessHours"></el-input>
+        </el-form-item>
+        <el-form-item label="用户平均评分">
+          <el-input v-model="gymClub.averageRating"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="saveGymClub">保存</el-button>
+        </el-form-item>
+      </el-form>
     </div>
 
     <!-- 右侧表格容器 -->
     <div class="right-container">
 
-    <!-- 教练信息表格 -->
+      <!-- 教练信息表格 -->
       <h3>教练信息</h3>
-    <el-button type="primary" @click="showAddCoachDialog">新增教练</el-button>
-    <el-table
-        :data="coaches"
-        style="width: 100%"
-        v-loading="coachLoading"
-        @selection-change="handleCoachSelectionChange"
-    >
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="contactInfo" label="联系信息"></el-table-column>
-      <el-table-column prop="qualifications" label="资质"></el-table-column>
-      <el-table-column label="操作" width="150">
-        <template slot-scope="scope">
-          <el-button type="text" @click="editCoach(scope.row)">编辑</el-button>
-          <el-button type="text" @click="deleteCoach(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+      <el-button type="primary" @click="showAddCoachDialog">新增教练</el-button>
+      <el-table
+          :data="coaches"
+          style="width: 100%"
+          v-loading="coachLoading"
+          @selection-change="handleCoachSelectionChange"
+      >
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column prop="id" label="ID" width="80"></el-table-column>
+        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="contactInfo" label="联系信息"></el-table-column>
+        <el-table-column prop="qualifications" label="资质"></el-table-column>
+        <el-table-column label="操作" width="150">
+          <template slot-scope="scope">
+            <el-button type="text" @click="editCoach(scope.row)">编辑</el-button>
+            <el-button type="text" @click="deleteCoach(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
-    <!-- 健身器材表格 -->
+      <!-- 健身器材表格 -->
       <h3>健身器材信息</h3>
-    <el-button type="primary" @click="showAddEquipmentDialog">新增健身器材</el-button>
-    <el-table
-        :data="equipment"
-        style="width: 100%"
-        v-loading="equipmentLoading"
-        @selection-change="handleEquipmentSelectionChange"
-    >
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="description" label="描述"></el-table-column>
-      <el-table-column prop="quantity" label="数量"></el-table-column>
-      <!-- 其他列配置 ... -->
-      <el-table-column label="操作" width="150">
-        <template slot-scope="scope">
-          <el-button type="text" @click="editEquipment(scope.row)">编辑</el-button>
-          <el-button type="text" @click="deleteEquipment(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+      <el-button type="primary" @click="showAddEquipmentDialog">新增健身器材</el-button>
+      <el-table
+          :data="equipment"
+          style="width: 100%"
+          v-loading="equipmentLoading"
+          @selection-change="handleEquipmentSelectionChange"
+      >
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column prop="id" label="ID" width="80"></el-table-column>
+        <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column prop="description" label="描述"></el-table-column>
+        <el-table-column prop="quantity" label="数量"></el-table-column>
+        <!-- 其他列配置 ... -->
+        <el-table-column label="操作" width="150">
+          <template slot-scope="scope">
+            <el-button type="text" @click="editEquipment(scope.row)">编辑</el-button>
+            <el-button type="text" @click="deleteEquipment(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <!-- 新增教练对话框 -->
     <el-dialog
@@ -140,10 +143,29 @@
 </template>
 
 <script>
+import { getGymById,update } from '@/api/gymclub'
+import { getAdmin } from '@/api/admin'
+import {getEquipmentByAdminId} from '@/api/equipment'
+import {HomeFilled} from "@element-plus/icons-vue";
+import router from "@/router";
 export default {
+  computed: {
+    HomeFilled() {
+      return HomeFilled
+    }
+  },
   data() {
     return {
-      gymClub: {
+      admin: {
+        id: '',
+        username: '',
+        password: '',
+        name: '',
+        email: '',
+        phone: '',
+        managedGym: '',
+      },
+      gymClub: [{
         id: 1,
         name: "",
         description: "",
@@ -153,12 +175,16 @@ export default {
         phone: "",
         businessHours: "",
         averageRating: 0,
-      },
+      }],
       gymClubRules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
       },
-      coaches: [], // 存储教练信息
-      equipment: [], // 存储健身器材信息
+      coaches: [{
+
+      }], // 存储教练信息
+      equipment: [{
+
+      }], // 存储健身器材信息
       coachLoading: false, // 加载状态
       equipmentLoading: false, // 加载状态
       selectedCoaches: [], // 选中的教练
@@ -191,10 +217,30 @@ export default {
       }
     };
   },
+  created() {
+    this.initGymClub()
+  },
   methods: {
+    //初始化健身房信息
+    initGymClub() {
+      this.admin.username = localStorage.getItem('username') || null
+      getAdmin(this.admin).then(res => {
+        this.admin = res.data
+        getGymById(this.admin.managedGym).then(res =>{
+          this.gymClub = res.data
+          getEquipmentByAdminId(this.gymClub.id).then(res => {
+            this.equipment = res.data
+          })
+        })
+      })
+      console.log(this.equipment);
+    },
+    goHome(){
+      router.replace('/')
+    },
     // 保存健身房信息
     saveGymClub() {
-      // 实现保存逻辑
+      update(this.gymClub)
     },
     // 编辑教练信息
     editCoach(coach) {
@@ -248,6 +294,12 @@ export default {
 
 
 <style>
+.gym-club-title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
 .container {
   display: flex;
   align-items: baseline;

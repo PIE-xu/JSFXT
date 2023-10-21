@@ -4,6 +4,9 @@ import com.example.demo.entity.Equipment;
 import com.example.demo.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/equipment")
 public class EquipmentController {
@@ -17,8 +20,8 @@ public class EquipmentController {
     }
 
     @GetMapping("admin/{gymId}")
-    public Equipment getequipmentByAdminId(@PathVariable String gymId){
-        return equipmentService.getByAdminId(gymId);
+    public Equipment[] getequipmentByAdminId( @PathVariable String gymId){
+        return new Equipment[]{equipmentService.getByAdminId(gymId)};
     }
 
     @PostMapping("/add")

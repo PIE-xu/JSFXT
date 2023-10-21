@@ -5,9 +5,9 @@
       <div class="promo-nav">
         <h3 class="title">健身俱乐部共享平台</h3>
         <div class="promo-button">
-          <el-button type="warning" :icon="CirclePlus" class="join-button" @click="joinUs">加入我们</el-button>
-          <el-button type="warning" :icon="Setting" class="manage_edit" @click="manageEdit">健身房管理</el-button>
-          <el-button type="warning" :icon="Sunset" class="login-button" @click="login">已有账号？立即登录</el-button>
+          <el-button type="warning" :icon="CirclePlus" class="join-button" @click="joinUs" v-if="!username">加入我们</el-button>
+          <el-button type="warning" :icon="Setting" class="manage_edit" @click="manageEdit" v-if="username">健身房管理</el-button>
+          <el-button type="warning" :icon="Sunset" class="login-button" @click="login" v-if="!username">已有账号？立即登录</el-button>
         </div>
       </div>
     </el-header>
@@ -64,6 +64,7 @@ export default {
   },
   data() {
     return {
+      username: '',
       carouselItems: [
         { id: 1, image: "public/image/gym1.jpeg" },
         { id: 2, image: "public/image/gym2.jpeg" },
@@ -76,6 +77,7 @@ export default {
   },
   created() {
     this.getRecommendedGyms(); // 在组件创建时调用获取数据的方法
+    this.username = localStorage.getItem('username') || null
   },
   methods: {
     //获得推荐健身房数据
