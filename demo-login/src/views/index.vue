@@ -5,9 +5,9 @@
       <div class="promo-nav">
         <h3 class="title">健身俱乐部共享平台</h3>
         <div class="promo-button">
-          <el-button type="warning" :icon="CirclePlus" class="join-button" @click="joinUs" v-if="!username">加入我们</el-button>
-          <el-button type="warning" :icon="Setting" class="manage_edit" @click="manageEdit" v-if="username">健身房管理</el-button>
-          <el-button type="warning" :icon="Sunset" class="login-button" @click="login" v-if="!username">已有账号？立即登录</el-button>
+          <el-button type="warning" :icon="CirclePlus" class="join-button" @click="joinUs" v-if="!admin.username">加入我们</el-button>
+          <el-button type="warning" :icon="Setting" class="manage_edit" @click="manageEdit" v-if="admin.username">健身房管理</el-button>
+          <el-button type="warning" :icon="Sunset" class="login-button" @click="login" v-if="!admin.username">已有账号？立即登录</el-button>
           <el-button type="warning" :icon="Sunset" class="login-button" @click="goAddGym" v-if="admin.managedGym===0">添加俱乐部</el-button>
         </div>
       </div>

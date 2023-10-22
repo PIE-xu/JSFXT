@@ -13,7 +13,7 @@ public class Admin {
     private String password;    // 管理员的密码，加密存储
     private String name;        // 管理员的真实姓名
     private String email;       // 管理员的电子邮件地址
-    private String phone;       // 管理员的手机号码
+    private String phone;
     private int managedGym;     // 所管理的健身会所的外键，关联到健身会所信息表的id字段
     @TableField(exist = false)
     private GymClub gymClub;

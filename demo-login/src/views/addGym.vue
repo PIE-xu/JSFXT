@@ -52,6 +52,7 @@
 <script>
 import { add as gymAdd } from '@/api/gymclub'
 import router from "@/router";
+import {getAdmin} from "@/api/admin";
 export default {
   data() {
     return {
@@ -64,12 +65,27 @@ export default {
         phone: '',
         businessHours: '',
       },
+      admin: {
+        username: '',
+        password: '',
+        name: '',
+        email: '',
+        phone: '',
+        managedGym: '',
+      },
     };
+  },
+  created() {
+    this.init()
   },
   methods: {
     async submitForm() {
-      await gymAdd(this.gymClub)
-      router.replace('/index')
+      const requestData = {
+        gym: this.gymClub,
+        admin: this.admin
+      };
+      await gymAdd(requestData)
+      router.replace('/')
       // 处理表单提交逻辑
     },
     resetForm() {
@@ -82,7 +98,14 @@ export default {
         streetAddress: '',
         phone: '',
         businessHours: '',
-      };
+      }
+    },
+    init() {
+      this.admin.username = localStorage.getItem('username') || null
+      getAdmin(this.admin).then(res => {
+        this.admin = res.data
+        console.log(this.admin);
+      })
     },
   },
 };

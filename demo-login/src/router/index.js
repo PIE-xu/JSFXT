@@ -52,7 +52,12 @@ const router = createRouter({
       path: '/addgym',
       name: 'addgym',
       component: AddGym
-    }
+    },
+    {
+      path: '/gymmanage',
+      name: 'gymmanage',
+      component: GymManage
+    },
   ]
 })
 

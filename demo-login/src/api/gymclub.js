@@ -18,7 +18,7 @@ export const add = (data) =>{
     return request({
         url: '/gym/add',
         method:'POST',
-        data
+        data,
     })
 }
 export const update = (data) =>{
